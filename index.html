@@ -5,35 +5,35 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:400,500,700,400italic|Material+Icons">
-  <link rel="shortcut icon" href="https://storage.cloud.google.com/cdio-cots.appspot.com/uploads/favicon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="https://storage.cloud.google.com/cdio-cots.appspot.com/uploads/favicon.ico"
+    type="image/x-icon">
   <title>COTS</title>
 </head>
 
 <body style="background-color: #f1f3f6">
-  <div id="app">
-    <!-- Load Facebook SDK for JavaScript -->
-    <div id="fb-root"></div>
-    <script>
-      window.fbAsyncInit = function () {
-        FB.init({
-          xfbml: true,
-          version: 'v5.0'
-        });
-      };
+  <!-- Load Facebook SDK for JavaScript -->
+  <div id="fb-root"></div>
+  <script>
+    window.fbAsyncInit = function () {
+      FB.init({
+        xfbml: true,
+        version: 'v5.0'
+      });
+    };
 
-      (function (d, s, id) {
-        var js, fjs = d.getElementsByTagName(s)[0];
-        if (d.getElementById(id)) return;
-        js = d.createElement(s); js.id = id;
-        js.src = 'https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js';
-        fjs.parentNode.insertBefore(js, fjs);
-      }(document, 'script', 'facebook-jssdk'));</script>
+    (function (d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = 'https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js';
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
 
-    <!-- Your customer chat code -->
-    <div class="fb-customerchat" attribution=setup_tool page_id="104994297695555"
-      logged_in_greeting="Xin chào! Tôi là Cảnh!" logged_out_greeting="Xin chào! Tôi là Cảnh!">
-    </div>
+  <!-- Your customer chat code -->
+  <div class="fb-customerchat" attribution=setup_tool page_id="104994297695555"
+    logged_in_greeting="Xin chào! Tôi là Cảnh!" logged_out_greeting="Xin chào! Tôi là Cảnh!">
   </div>
+  <div id="app"></div>
   <!-- built files will be auto injected -->
 </body>
 
