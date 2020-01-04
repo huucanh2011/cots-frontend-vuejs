@@ -18,8 +18,10 @@ const actions = {
     return new Promise((reslove, reject) => {
       CallerApiService.get("date-departure", id)
         .then(res => {
-          reslove(res);
-          commit("DATES_FETCH", res.data)
+          if (res && res.status === 200) {
+            commit("DATES_FETCH", res.data);
+            reslove(res);
+          }
         })
         .catch(err => {
           reject(err);
@@ -31,8 +33,10 @@ const actions = {
     return new Promise((reslove, reject) => {
       CallerApiService.create("date-departure", date)
         .then(res => {
-          reslove(res);
-          context.commit("DATE_CREATE", res.data);
+          if (res && res.status === 200) {
+            context.commit("DATE_CREATE", res.data);
+            reslove(res);
+          }
         })
         .catch(err => {
           reject(err);
@@ -43,7 +47,7 @@ const actions = {
   async DATE_DELETE(context, id) {
     try {
       const { data } = await CallerApiService.delete("d-date-departure", id);
-      context.commit("DATE_DELETE", data.id)
+      context.commit("DATE_DELETE", data.id);
     } catch (error) {
       console.log(error);
     }
@@ -57,14 +61,14 @@ const mutations = {
   },
   DATE_CREATE(state, date) {
     state.dates.push({
-      'id': date.id,
-      'date_departure': date.date_departure,
-      'tour_id': date.tour_id
-    })
+      id: date.id,
+      date_departure: date.date_departure,
+      tour_id: date.tour_id
+    });
   },
   DATE_DELETE(state, id) {
-    const index = state.dates.findIndex(item => item.id == id)
-    state.dates.splice(index, 1)
+    const index = state.dates.findIndex(item => item.id == id);
+    state.dates.splice(index, 1);
   }
 };
 

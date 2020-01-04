@@ -25,8 +25,10 @@ const actions = {
   async COMMENTS_FETCH({ commit }) {
     commit("FETCH_START");
     try {
-      const { data } = await CallerApiService.get("comments");
-      commit("FETCH_END", data);
+      const res = await CallerApiService.get("comments");
+      if (res && res.status === 200) {
+        commit("FETCH_END", res.data);
+      }
     } catch ({ response }) {
       commit("SET_ERROR", JSON.parse(response.data));
       throw new Error(JSON.parse(response.data));
@@ -36,8 +38,10 @@ const actions = {
   async COMMENTS_PAGINATE({ commit }, pageNum) {
     commit("FETCH_START");
     try {
-      const { data } = await CallerApiService.query("comments?page=" + pageNum);
-      commit("FETCH_END", data);
+      const res = await CallerApiService.query("comments?page=" + pageNum);
+      if (res && res.status === 200) {
+        commit("FETCH_END", res.data);
+      }
     } catch ({ response }) {
       commit("SET_ERROR", JSON.parse(response.data));
       throw new Error(JSON.parse(response.data));
@@ -46,8 +50,10 @@ const actions = {
 
   async COMMENT_CREATE({ commit }, comment) {
     try {
-      const { data } = await CallerApiService.create("comments", comment);
-      commit("CREATE_COMMENT", data);
+      const res = await CallerApiService.create("comments", comment);
+      if (res && res.status === 200) {
+        commit("CREATE_COMMENT", res.data);
+      }
     } catch ({ response }) {
       commit("SET_ERROR", JSON.parse(response.data));
       throw new Error(JSON.parse(response.data));
@@ -56,8 +62,14 @@ const actions = {
 
   async COMMENT_UPDATE({ commit }, params) {
     try {
-      const { data } = await CallerApiService.update("comments", params.id, params.updatedFields);
-      commit("UPDATE_COMMENT", data);
+      const res = await CallerApiService.update(
+        "comments",
+        params.id,
+        params.updatedFields
+      );
+      if (res && res.status === 200) {
+        commit("UPDATE_COMMENT", res.data);
+      }
     } catch ({ response }) {
       commit("SET_ERROR", JSON.parse(response.data));
       throw new Error(JSON.parse(response.data));

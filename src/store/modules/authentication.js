@@ -21,8 +21,10 @@ const actions = {
     return new Promise((resolve, reject) => {
       ApiService.post("auth/register", credentials)
         .then(response => {
-          context.commit("SET_AUTH", response.data);
-          resolve(response);
+          if (response && response.status === 200) {
+            context.commit("SET_AUTH", response.data);
+            resolve(response);
+          }
         })
         .catch(error => {
           reject(error);
@@ -33,9 +35,11 @@ const actions = {
   LOGIN(context, credentials) {
     return new Promise((resolve, reject) => {
       ApiService.post("auth/login", credentials)
-        .then(({ data }) => {
-          context.commit("SET_AUTH", data);
-          resolve(data);
+        .then(response => {
+          if (response && response.status === 200) {
+            context.commit("SET_AUTH", response.data);
+            resolve(response);
+          }
         })
         .catch(({ response }) => {
           reject(response.data);
@@ -47,7 +51,9 @@ const actions = {
     return new Promise((reslove, reject) => {
       ApiService.post("auth/forgotpassword", email)
         .then(response => {
-          reslove(response);
+          if (response && response.status === 200) {
+            resolve(response);
+          }
         })
         .catch(error => {
           reject(error);
@@ -57,8 +63,10 @@ const actions = {
 
   async UPDATE_DETAILS({ commit }, userUpdate) {
     try {
-      const { data } = await ApiService.put("auth/updatedetails", userUpdate);
-      commit('UPDATE_DATA', data);
+      const response = await ApiService.put("auth/updatedetails", userUpdate);
+      if (response && response.status === 200) {
+        commit("UPDATE_DATA", response.data);
+      }
     } catch (error) {
       throw new Error(error);
     }
@@ -66,8 +74,10 @@ const actions = {
 
   async UPDATE_AVATAR({ commit }, avatar) {
     try {
-      const { data } = await ApiService.post("auth/updateavatar", avatar);
-      commit('UPDATE_AVATAR', data);
+      const response = await ApiService.post("auth/updateavatar", avatar);
+      if (response && response.status === 200) {
+        commit("UPDATE_DATA", response.data);
+      }
     } catch (error) {
       throw new Error(error);
     }
@@ -75,7 +85,7 @@ const actions = {
     //   ApiService.post("auth/updateavatar", avatar)
     //     .then(response => {
     //       console.log(response);
-          
+
     //       reslove(response);
     //     })
     //     .catch(error => {
@@ -90,8 +100,10 @@ const actions = {
       return new Promise((resolve, reject) => {
         ApiService.get("auth/me")
           .then(response => {
-            context.commit("SET_AUTH", response.data);
-            resolve(response);
+            if (response && response.status === 200) {
+              context.commit("SET_AUTH", response.data);
+              resolve(response);
+            }
           })
           .catch(error => {
             reject(error);

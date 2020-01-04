@@ -25,8 +25,10 @@ const actions = {
   async TOURS_FETCH({ commit }) {
     commit("FETCH_START");
     try {
-      const { data } = await CallerApiService.get("tours");
-      commit("FETCH_END", data);
+      const res = await CallerApiService.get("tours");
+      if (res && res.status === 200) {
+        commit("FETCH_END", res.data);
+      }
     } catch ({ response }) {
       commit("SET_ERROR", JSON.parse(response.data));
       throw new Error(JSON.parse(response.data));
@@ -35,8 +37,12 @@ const actions = {
   async SEARCH_TOURS({ commit }, params) {
     commit("FETCH_START");
     try {
-      const { data } = await CallerApiService.query(`search-tours?q=${params.q}&cate=${params.cate}`);
-      commit("FETCH_END", data);
+      const res = await CallerApiService.query(
+        `search-tours?q=${params.q}&cate=${params.cate}`
+      );
+      if (res && res.status === 200) {
+        commit("FETCH_END", res.data);
+      }
     } catch ({ response }) {
       commit("SET_ERROR", JSON.parse(response.data));
       throw new Error(JSON.parse(response.data));
@@ -45,8 +51,10 @@ const actions = {
   async TOURS_PAGINATE({ commit }, pageNum) {
     commit("FETCH_START");
     try {
-      const { data } = await CallerApiService.query("tours?page=" + pageNum);
-      commit("FETCH_END", data);
+      const res = await CallerApiService.query("tours?page=" + pageNum);
+      if (res && res.status === 200) {
+        commit("FETCH_END", res.data);
+      }
     } catch ({ response }) {
       commit("SET_ERROR", JSON.parse(response.data));
       throw new Error(JSON.parse(response.data));

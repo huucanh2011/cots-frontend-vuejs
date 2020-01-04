@@ -25,8 +25,10 @@ const actions = {
   async USERS_FETCH({ commit }) {
     commit("FETCH_START");
     try {
-      const { data } = await CallerApiService.get("users");
-      commit("FETCH_END", data);
+      const response = await CallerApiService.get("users");
+      if (response && response.status === 200) {
+        commit("FETCH_END", response.data);
+      }
     } catch ({ response }) {
       commit("SET_ERROR", JSON.parse(response.data));
       throw new Error(JSON.parse(response.data));
@@ -37,7 +39,9 @@ const actions = {
     return new Promise((reslove, reject) => {
       CallerApiService.get("users", id)
         .then(response => {
-          reslove(response);
+          if (response && response.status === 200) {
+            reslove(response);
+          }
         })
         .catch(error => {
           reject(error);
@@ -48,8 +52,12 @@ const actions = {
   async USERS_SEARCH({ commit }, searchText) {
     commit("FETCH_START");
     try {
-      const { data } = await CallerApiService.query("search-users?q=" + searchText);
-      commit("FETCH_END", data);
+      const response = await CallerApiService.query(
+        "search-users?q=" + searchText
+      );
+      if (response && response.status === 200) {
+        commit("FETCH_END", response.data);
+      }
     } catch ({ response }) {
       commit("SET_ERROR", JSON.parse(response.data));
       throw new Error(JSON.parse(response.data));
@@ -59,8 +67,10 @@ const actions = {
   async USERS_PAGINATE({ commit }, pageNum) {
     commit("FETCH_START");
     try {
-      const { data } = await CallerApiService.query("users?page=" + pageNum);
-      commit("FETCH_END", data);
+      const response = await CallerApiService.query("users?page=" + pageNum);
+      if (response && response.status === 200) {
+        commit("FETCH_END", response.data);
+      }
     } catch ({ response }) {
       commit("SET_ERROR", JSON.parse(response.data));
       throw new Error(JSON.parse(response.data));
@@ -69,8 +79,10 @@ const actions = {
 
   async USER_CHANGE_STATUS({ commit }, user) {
     try {
-      const { data } = await CallerApiService.create("block-user", user);
-      commit("UPDATE_USER", data);
+      const response = await CallerApiService.create("block-user", user);
+      if (response && response.status === 200) {
+        commit("UPDATE_USER", response.data);
+      }
     } catch ({ response }) {
       commit("SET_ERROR", JSON.parse(response.data));
       throw new Error(JSON.parse(response.data));
@@ -79,8 +91,10 @@ const actions = {
 
   async USER_CREATE({ commit }, user) {
     try {
-      const { data } = await CallerApiService.create("users", user);
-      commit("CREATE_USER", data);
+      const response = await CallerApiService.create("users", user);
+      if (response && response.status === 200) {
+        commit("CREATE_USER", response.data);
+      }
     } catch ({ response }) {
       commit("SET_ERROR", JSON.parse(response.data));
       throw new Error(JSON.parse(response.data));
@@ -89,8 +103,14 @@ const actions = {
 
   async USER_UPDATE({ commit }, params) {
     try {
-      const { data } = await CallerApiService.update("users", params.id, params.updatedFields);
-      commit("UPDATE_USER", data);
+      const response = await CallerApiService.update(
+        "users",
+        params.id,
+        params.updatedFields
+      );
+      if (response && response.status === 200) {
+        commit("UPDATE_USER", response.data);
+      }
     } catch ({ response }) {
       commit("SET_ERROR", JSON.parse(response.data));
       throw new Error(JSON.parse(response.data));
@@ -123,19 +143,19 @@ const mutations = {
     state.errors = {};
   },
   CREATE_USER(state, user) {
-    state.users.data.unshift(user)
+    state.users.data.unshift(user);
     state.errors = {};
   },
   UPDATE_USER(state, user) {
     const index = state.users.data.findIndex(item => item.id === user.id);
-    state.users.data.splice(index, 1, user)
+    state.users.data.splice(index, 1, user);
     state.errors = {};
   },
   DELETE_USER(state, id) {
     const index = state.users.data.findIndex(item => item.id === id);
-    state.users.data.splice(index, 1)
+    state.users.data.splice(index, 1);
     state.errors = {};
-  },
+  }
 };
 
 //export

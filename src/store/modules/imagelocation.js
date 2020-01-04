@@ -22,8 +22,10 @@ const actions = {
   async IMAGES_FETCH({ commit }) {
     commit("FETCH_START");
     try {
-      const { data } = await CallerApiService.get("image-locations");
-      commit('FETCH_END', data);
+      const res = await CallerApiService.get("image-locations");
+      if (res && res.status === 200) {
+        commit("FETCH_END", res.data);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -37,7 +39,7 @@ const actions = {
   async IMAGES_DELETE(context, id) {
     await CallerApiService.delete("image-locations", id);
     context.dispatch("imagelocation/IMAGES_FETCH", {}, { root: true });
-  },
+  }
 };
 
 //mutations

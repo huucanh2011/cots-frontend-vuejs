@@ -22,8 +22,10 @@ const actions = {
   async TOURCATES_FETCH({ commit }) {
     commit("FETCH_START");
     try {
-      const { data } = await CallerApiService.get("tour-category");
-      commit("FETCH_END", data);
+      const response = await CallerApiService.get("tour-category");
+      if (response && response.status === 200) {
+        commit("FETCH_END", response.data);
+      }
     } catch (error) {
       console.log(error);
     }

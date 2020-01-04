@@ -25,8 +25,10 @@ const actions = {
   async RATINGS_FETCH({ commit }) {
     commit("FETCH_START");
     try {
-      const { data } = await CallerApiService.get("ratings");
-      commit("FETCH_END", data);
+      const response = await CallerApiService.get("ratings");
+      if (response && response.status === 200) {
+        commit("FETCH_END", response.data);
+      }
     } catch ({ response }) {
       commit("SET_ERROR", JSON.parse(response.data));
       throw new Error(JSON.parse(response.data));
@@ -36,8 +38,10 @@ const actions = {
   async RATINGS_PAGINATE({ commit }, pageNum) {
     commit("FETCH_START");
     try {
-      const { data } = await CallerApiService.query("ratings?page=" + pageNum);
-      commit("FETCH_END", data);
+      const response = await CallerApiService.query("ratings?page=" + pageNum);
+      if (response && response.status === 200) {
+        commit("FETCH_END", response.data);
+      }
     } catch ({ response }) {
       commit("SET_ERROR", JSON.parse(response.data));
       throw new Error(JSON.parse(response.data));
@@ -58,8 +62,10 @@ const actions = {
 
   async RATING_UPDATE({ commit }, params) {
     try {
-      const { data } = await CallerApiService.update("ratings", params.id, params.updatedFields);
-      commit("UPDATE_RATING", data);
+      const response = await CallerApiService.update("ratings", params.id, params.updatedFields);
+      if (response && response.status === 200) {
+        commit("UPDATE_RATING", response.data);
+      }
     } catch ({ response }) {
       commit("SET_ERROR", JSON.parse(response.data));
       throw new Error(JSON.parse(response.data));

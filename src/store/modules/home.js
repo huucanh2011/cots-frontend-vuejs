@@ -24,7 +24,7 @@ const getters = {
     return state.topPartners;
   },
   isLoading: state => {
-    return state.isLoading
+    return state.isLoading;
   }
 };
 
@@ -33,8 +33,8 @@ const actions = {
   async POSTS_FETCH({ commit }) {
     commit("FETCH_START");
     try {
-      const res = await CallerApiService.get("index-home");      
-      if(res && res.status === 200) {
+      const res = await CallerApiService.get("index-home");
+      if (res && res.status === 200) {
         commit("FETCH_POST", res.data);
       }
     } catch (error) {
@@ -43,16 +43,20 @@ const actions = {
   },
   async COMMENTS_FETCH({ commit }) {
     try {
-      const { data } = await CallerApiService.get("comment-home");      
-      commit("FETCH_COMMENT", data);
+      const res = await CallerApiService.get("comment-home");
+      if (res && res.status === 200) {
+        commit("FETCH_COMMENT", res.data);
+      }
     } catch (error) {
       throw new Error(error);
     }
   },
   async FETCH_MORE_DATA({ commit }, pageNum) {
     try {
-      const { data } = await CallerApiService.query(`index-home?page=${pageNum}`);    
-      commit("PAGINATE_POST", data);
+      const res = await CallerApiService.query(`index-home?page=${pageNum}`);
+      if (res && res.status === 200) {
+        commit("PAGINATE_POST", res.data);
+      }
     } catch (error) {
       throw new Error(error);
     }
@@ -60,8 +64,10 @@ const actions = {
   async TOP_LOCATIONS_FETCH({ commit }) {
     commit("FETCH_START");
     try {
-      const { data } = await CallerApiService.get("top-location");
-      commit("FETCH_LOCATION", data);
+      const res = await CallerApiService.get("top-location");
+      if (res && res.status === 200) {
+        commit("FETCH_LOCATION", res.data);
+      }
     } catch (error) {
       throw new Error(error);
     }
@@ -69,8 +75,10 @@ const actions = {
   async TOP_PARTNERS_FETCH({ commit }) {
     commit("FETCH_START");
     try {
-      const { data } = await CallerApiService.get("top-partner");
-      commit("FETCH_PARTNER", data);
+      const res = await CallerApiService.get("top-partner");
+      if (res && res.status === 200) {
+        commit("FETCH_PARTNER", res.data);
+      }
     } catch (error) {
       throw new Error(error);
     }
@@ -78,9 +86,11 @@ const actions = {
   async POST_CREATE({ commit }, post) {
     return new Promise((reslove, reject) => {
       CallerApiService.create("posts", post)
-        .then(({ data }) => {
-          reslove(data);
-          commit("CREATE_POST", data);
+        .then(res => {
+          if (res && res.status === 200) {
+            commit("CREATE_POST", res.data);
+            reslove(res);
+          }
         })
         .catch(({ response }) => {
           reject(response);
@@ -91,9 +101,11 @@ const actions = {
   async POST_UPDATE({ commit }, params) {
     return new Promise((reslove, reject) => {
       CallerApiService.update("posts", params.id, params.updatedFields)
-        .then(({ data }) => {
-          reslove(data);
-          commit("UPDATE_POST", data);
+        .then(res => {
+          if (res && res.status === 200) {
+            commit("UPDATE_POST", res.data);
+            reslove(res);
+          }
         })
         .catch(({ response }) => {
           reject(response);
@@ -112,8 +124,10 @@ const actions = {
   },
   async COMMENT_CREATE({ commit }, comment) {
     try {
-      const { data } = await CallerApiService.create("comments", comment);
-      commit("CREATE_COMMENT", data);
+      const res = await CallerApiService.create("comments", comment);
+      if (res && res.status === 200) {
+        commit("CREATE_COMMENT", res.data);
+      }
     } catch ({ response }) {
       commit("SET_ERROR", JSON.parse(response.data));
       throw new Error(JSON.parse(response.data));
@@ -121,8 +135,14 @@ const actions = {
   },
   async COMMENT_UPDATE({ commit }, params) {
     try {
-      const { data } = await CallerApiService.update("comments", params.id, params.updatedFields);
-      commit("UPDATE_COMMENT", data);
+      const res = await CallerApiService.update(
+        "comments",
+        params.id,
+        params.updatedFields
+      );
+      if (res && res.status === 200) {
+        commit("UPDATE_COMMENT", res.data);
+      }
     } catch ({ response }) {
       commit("SET_ERROR", JSON.parse(response.data));
       throw new Error(JSON.parse(response.data));
@@ -183,7 +203,7 @@ const mutations = {
     state.comments.splice(index, 1);
   },
   PAGINATE_POST(state, posts) {
-    posts.data.map(item => state.posts.data.push(item))
+    posts.data.map(item => state.posts.data.push(item));
   }
 };
 

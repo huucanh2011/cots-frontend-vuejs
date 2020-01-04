@@ -37,16 +37,18 @@ const actions = {
   async DATAS_FETCH({ commit }) {
     commit("FETCH_START");
     try {
-      const { data } = await CallerApiService.get("dashboard");
-      commit("FETCH_COUNT_END", data.count);
-      commit("FETCH_TOUR_ORDER_END", data.tourOrders);
-      commit("FETCH_TOUR_ORDER_MONTHLY_END", data.tourOrdersMonthly);      
-      commit("FETCH_POST_MONTHLY_END", data.postsMonthly);      
-      commit("FETCH_TOUR_ORDER_YEAR_END", data.years);      
+      const res = await CallerApiService.get("dashboard");
+      if (res && res.status === 200) {
+        commit("FETCH_COUNT_END", res.data.count);
+        commit("FETCH_TOUR_ORDER_END", res.data.tourOrders);
+        commit("FETCH_TOUR_ORDER_MONTHLY_END", res.data.tourOrdersMonthly);
+        commit("FETCH_POST_MONTHLY_END", res.data.postsMonthly);
+        commit("FETCH_TOUR_ORDER_YEAR_END", res.data.years);
+      }
     } catch (error) {
       throw new Error(error);
     }
-  },
+  }
 };
 
 //mutations
@@ -73,7 +75,7 @@ const mutations = {
   FETCH_TOUR_ORDER_YEAR_END(state, years) {
     state.isLoading = false;
     state.years = years;
-  },
+  }
 };
 
 //export

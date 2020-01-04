@@ -22,8 +22,10 @@ const actions = {
   async IMAGES_FETCH({ commit }) {
     commit("FETCH_START");
     try {
-      const { data } = await CallerApiService.get("image-posts");
-      commit("FETCH_END", data);
+      const res = await CallerApiService.get("image-posts");
+      if (res && res.status === 200) {
+        commit("FETCH_END", res.data);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -32,8 +34,10 @@ const actions = {
   async IMAGES_SHOW({ commit }, id) {
     commit("FETCH_START");
     try {
-      const { data } = await CallerApiService.get("image-posts", id);
-      commit("FETCH_END", data);
+      const res = await CallerApiService.get("image-posts", id);
+      if (res && res.status === 200) {
+        commit("FETCH_END", res.data);
+      }
     } catch (error) {
       console.log(error);
     }

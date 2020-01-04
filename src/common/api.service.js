@@ -24,6 +24,7 @@ const ApiService = {
     // Vue.axios.defaults.headers.common[
     //   "Authorization"
     // ] = `Bearer ${JwtService.getToken()}`;
+
     axios.defaults.headers.common["Content-Type"] = "multipart/form-data";
 
     axios.defaults.headers.common["Accept"] = "application/json";
@@ -32,7 +33,6 @@ const ApiService = {
       "Authorization"
     ] = `Bearer ${JwtService.getToken()}`;
   },
-  
 
   query(resource, params) {
     return axios.get(`${API_URL}/${resource}`, params).catch(error => {
@@ -47,18 +47,15 @@ const ApiService = {
   // },
 
   get(resource, id) {
-    if(id !== null && id !== undefined && id !== '') {
-        return axios.get(`${API_URL}/${resource}/${id}`).then(res => {console.log("test", res)
-      }).catch(error => {
+    if (id !== null && id !== undefined && id !== "") {
+      return axios.get(`${API_URL}/${resource}/${id}`).catch(error => {
         throw new Error(`ApiService ${error}`);
       });
     } else {
-      return axios.get(`${API_URL}/${resource}`)
-      .catch(error => {
+      return axios.get(`${API_URL}/${resource}`).catch(error => {
         throw new Error(`ApiService ${error}`);
       });
     }
-    
   },
 
   post(resource, params) {
@@ -73,10 +70,12 @@ const ApiService = {
     return axios.put(`${API_URL}/${resource}`, params);
   },
 
-  delete(resource, id = "") {
-    return axios.delete(`${API_URL}/${resource}/${id}`).catch(error => {
-      throw new Error(`ApiService ${error}`);
-    });
+  delete(resource, id) {
+    if (id !== null && id !== undefined && id !== "") {
+      return axios.delete(`${API_URL}/${resource}/${id}`).catch(error => {
+        throw new Error(`ApiService ${error}`);
+      });
+    }
   }
   // post(resource, params) {
   //   return Vue.axios.post(`${resource}`, params);

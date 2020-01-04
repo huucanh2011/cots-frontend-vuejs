@@ -25,8 +25,10 @@ const actions = {
   async POSTS_FETCH({ commit }) {
     commit("FETCH_START");
     try {
-      const { data } = await CallerApiService.get("posts");
-      commit("FETCH_END", data);
+      const response = await CallerApiService.get("posts");
+      if (response && response.status === 200) {
+        commit("FETCH_END", response.data);
+      }
     } catch ({ response }) {
       commit("SET_ERROR", JSON.parse(response.data));
       throw new Error(JSON.parse(response.data));
@@ -36,8 +38,10 @@ const actions = {
   async POSTS_PAGINATE({ commit }, pageNum) {
     commit("FETCH_START");
     try {
-      const { data } = await CallerApiService.get("posts?page=" + pageNum);
-      commit("FETCH_END", data);
+      const response = await CallerApiService.get("posts?page=" + pageNum);
+      if (response && response.status === 200) {
+        commit("FETCH_END", response.data);
+      }
     } catch ({ response }) {
       commit("SET_ERROR", JSON.parse(response.data));
       throw new Error(JSON.parse(response.data));
@@ -47,10 +51,12 @@ const actions = {
   async POSTS_SEARCH({ commit }, searchText) {
     commit("FETCH_START");
     try {
-      const { data } = await CallerApiService.query(
+      const response = await CallerApiService.query(
         "search-posts?q=" + searchText
       );
-      commit("FETCH_END", data);
+      if (response && response.status === 200) {
+        commit("FETCH_END", response.data);
+      }
     } catch ({ response }) {
       commit("SET_ERROR", JSON.parse(response.data));
       throw new Error(JSON.parse(response.data));
@@ -59,8 +65,10 @@ const actions = {
 
   async POST_CHANGE_STATUS({ commit }, post) {
     try {
-      const { data } = await CallerApiService.create("block-post", post);
-      commit("UPDATE_POST", data);
+      const response = await CallerApiService.create("block-post", post);
+      if (response && response.status === 200) {
+        commit("UPDATE_POST", response.data);
+      }
     } catch ({ response }) {
       commit("SET_ERROR", JSON.parse(response.data));
       throw new Error(JSON.parse(response.data));
@@ -70,9 +78,11 @@ const actions = {
   async POST_CREATE({ commit }, post) {
     return new Promise((reslove, reject) => {
       CallerApiService.create("posts", post)
-        .then(({ data }) => {
-          reslove(data);
-          commit("CREATE_POST", data);
+        .then(response => {
+          if (response && response.status === 200) {
+            commit("CREATE_POST", response.data);
+            reslove(response);
+          }
         })
         .catch(({ response }) => {
           reject(response);
@@ -84,9 +94,11 @@ const actions = {
   async POST_UPDATE({ commit }, params) {
     return new Promise((reslove, reject) => {
       CallerApiService.update("posts", params.id, params.updatedFields)
-        .then(({ data }) => {
-          reslove(data);
-          commit("UPDATE_POST", data);
+        .then(response => {
+          if (response && response.status === 200) {
+            commit("UPDATE_POST", response.data);
+            reslove(response);
+          }
         })
         .catch(({ response }) => {
           reject(response);

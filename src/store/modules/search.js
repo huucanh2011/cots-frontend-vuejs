@@ -27,9 +27,11 @@ const actions = {
   async SEARCH({ commit }, searchText) {
     try {
       commit("FETCH_START");
-      const { data } = await CallerApiService.query("search?q=" + searchText);
-      commit("FETCH_TOUR_END", data.tours);
-      commit("FETCH_LOCATION_END", data.locations);
+      const response = await CallerApiService.query("search?q=" + searchText);
+      if (response && response.status === 200) {
+        commit("FETCH_TOUR_END", response.data.tours);
+        commit("FETCH_LOCATION_END", response.data.locations);
+      }
     } catch (error) {
       throw new Error(err);
     }
@@ -38,8 +40,10 @@ const actions = {
   ROLES_PAGINATE({ commit }, pageNum) {
     commit("FETCH_START");
     return CallerApiService.query("roles?page=" + pageNum)
-      .then(({ data }) => {
-        commit("FETCH_END", data);
+      .then(response => {
+        if (response && response.status === 200) {
+          commit("FETCH_END", response.data);
+        }
       })
       .catch(error => {
         throw new Error(error);

@@ -25,8 +25,10 @@ const actions = {
   async LOCATIONS_FETCH({ commit }) {
     commit("FETCH_START");
     try {
-      const { data } = await CallerApiService.get("locations");
-      commit("FETCH_END", data);
+      const res = await CallerApiService.get("locations");
+      if (res && res.status === 200) {
+        commit("FETCH_END", res.data);
+      }
     } catch ({ response }) {
       commit("SET_ERROR", JSON.parse(response.data));
       throw new Error(JSON.parse(response.data));
@@ -37,7 +39,9 @@ const actions = {
     return new Promise((reslove, reject) => {
       CallerApiService.get("locations", id)
         .then(response => {
-          reslove(response);
+          if (response && response.status === 200) {
+            reslove(response);
+          }
         })
         .catch(error => {
           reject(error);
@@ -49,24 +53,28 @@ const actions = {
     commit("FETCH_START");
     return new Promise((reslove, reject) => {
       CallerApiService.query("search-locations?q=" + searchText)
-      .then(({ data }) => {
-        commit("FETCH_END", data);
-        reslove(data);
-      })
-      .catch(({ response }) => {
-        commit("SET_ERROR", JSON.parse(response.data));
-        reject(JSON.parse(response.data));
-      })
-    })
+        .then(response => {
+          if (response && response.status === 200) {
+            commit("FETCH_END", response.data);
+            reslove(response);
+          }
+        })
+        .catch(({ response }) => {
+          commit("SET_ERROR", JSON.parse(response.data));
+          reject(JSON.parse(response.data));
+        });
+    });
   },
 
   async LOCATIONS_PAGINATE({ commit }, pageNum) {
     commit("FETCH_START");
     try {
-      const { data } = await CallerApiService.query(
+      const response = await CallerApiService.query(
         "locations?page=" + pageNum
       );
-      commit("FETCH_END", data);
+      if (response && response.status === 200) {
+        commit("FETCH_END", response.data);
+      }
     } catch ({ response }) {
       commit("SET_ERROR", JSON.parse(response.data));
       throw new Error(JSON.parse(response.data));
@@ -76,9 +84,11 @@ const actions = {
   async LOCATION_CREATE({ commit }, location) {
     return new Promise((reslove, reject) => {
       CallerApiService.create("locations", location)
-        .then(({ data }) => {
-          commit("CREATE_LOCATION", data);
-          reslove(data);
+        .then(response => {
+          if (response && response.status === 200) {
+            commit("CREATE_LOCATION", response.data);
+            reslove(response);
+          }
         })
         .catch(({ response }) => {
           commit("SET_ERROR", JSON.parse(response.data));
@@ -90,9 +100,11 @@ const actions = {
   async LOCATION_UPDATE({ commit }, params) {
     return new Promise((reslove, reject) => {
       CallerApiService.update("locations", params.id, params.updatedFields)
-        .then(({ data }) => {
-          commit("UPDATE_LOCATION", data);
-          reslove(data);
+        .then(response => {
+          if (response && response.status === 200) {
+            commit("UPDATE_LOCATION", response.data);
+            reslove(response);
+          }
         })
         .catch(({ response }) => {
           commit("SET_ERROR", JSON.parse(response.data));

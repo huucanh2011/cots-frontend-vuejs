@@ -25,8 +25,10 @@ const actions = {
   async DECENTRALIZATIONS_FETCH({ commit }) {
     commit("FETCH_START");
     try {
-      const { data } = await CallerApiService.get("decentralizations");
-      commit("FETCH_END", data);
+      const res = await CallerApiService.get("decentralizations");
+      if (res && res.status === 200) {
+        commit("FETCH_END", res.data);
+      }
     } catch ({ response }) {
       commit("SET_ERROR", JSON.parse(response.data));
       throw new Error(JSON.parse(response.data));
@@ -36,8 +38,12 @@ const actions = {
   async DECENTRALIZATIONS_SEARCH({ commit }, searchText) {
     commit("FETCH_START");
     try {
-      const { data } = await CallerApiService.query("search-decentralizations?q=" + searchText);
-      commit("FETCH_END", data);
+      const res = await CallerApiService.query(
+        "search-decentralizations?q=" + searchText
+      );
+      if (res && res.status === 200) {
+        commit("FETCH_END", res.data);
+      }
     } catch ({ response }) {
       commit("SET_ERROR", JSON.parse(response.data));
       throw new Error(JSON.parse(response.data));
@@ -47,8 +53,12 @@ const actions = {
   async DECENTRALIZATIONS_PAGINATE({ commit }, pageNum) {
     commit("FETCH_START");
     try {
-      const { data } = await CallerApiService.query("decentralizations?page=" + pageNum);
-      commit("FETCH_END", data);
+      const res = await CallerApiService.query(
+        "decentralizations?page=" + pageNum
+      );
+      if (res && res.status === 200) {
+        commit("FETCH_END", res.data);
+      }
     } catch ({ response }) {
       commit("SET_ERROR", JSON.parse(response.data));
       throw new Error(JSON.parse(response.data));
@@ -57,8 +67,10 @@ const actions = {
 
   async DECENTRALIZATION_CHANGE_STATUS({ commit }, user) {
     try {
-      const { data } = await CallerApiService.create("block-user", user);
-      commit("CHANGE_STATUS", data);
+      const res = await CallerApiService.create("block-user", user);
+      if (res && res.status === 200) {
+        commit("CHANGE_STATUS", res.data);
+      }
     } catch ({ response }) {
       commit("SET_ERROR", JSON.parse(response.data));
       throw new Error(JSON.parse(response.data));
@@ -67,8 +79,14 @@ const actions = {
 
   async DECENTRALIZATION_UPDATE({ commit }, params) {
     try {
-      const { data } = await CallerApiService.update("decentralizations", params.id, params.updatedFields);
-      commit("CHANGE_STATUS", data);
+      const res = await CallerApiService.update(
+        "decentralizations",
+        params.id,
+        params.updatedFields
+      );
+      if (res && res.status === 200) {
+        commit("CHANGE_STATUS", res.data);
+      }
     } catch ({ response }) {
       commit("SET_ERROR", JSON.parse(response.data));
       throw new Error(JSON.parse(response.data));
@@ -86,7 +104,9 @@ const mutations = {
     state.isLoading = true;
   },
   CHANGE_STATUS(state, data) {
-    const index = state.decentralizations.data.findIndex(item => item.id == data.id);
+    const index = state.decentralizations.data.findIndex(
+      item => item.id == data.id
+    );
     state.decentralizations.data.splice(index, 1, data);
     state.errors = {};
   },

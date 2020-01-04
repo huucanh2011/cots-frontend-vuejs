@@ -25,8 +25,10 @@ const actions = {
   async ROLES_FETCH({ commit }) {
     commit("FETCH_START");
     try {
-      const { data } = await CallerApiService.get("roles");
-      commit("FETCH_END", data);
+      const response = await CallerApiService.get("roles");
+      if (response && response.status === 200) {
+        commit("FETCH_END", response.data);
+      }
     } catch ({ response }) {
       commit("SET_ERROR", JSON.parse(response.data));
       throw new Error(JSON.parse(response.data));
@@ -36,8 +38,12 @@ const actions = {
   async ROLES_SEARCH({ commit }, searchText) {
     commit("FETCH_START");
     try {
-      const { data } = await CallerApiService.query("search-roles?q=" + searchText);
-      commit("FETCH_END", data);
+      const response = await CallerApiService.query(
+        "search-roles?q=" + searchText
+      );
+      if (response && response.status === 200) {
+        commit("FETCH_END", response.data);
+      }
     } catch ({ response }) {
       commit("SET_ERROR", JSON.parse(response.data));
       throw new Error(JSON.parse(response.data));
@@ -47,8 +53,10 @@ const actions = {
   async ROLES_PAGINATE({ commit }, pageNum) {
     commit("FETCH_START");
     try {
-      const { data } = await CallerApiService.query("roles?page=" + pageNum);
-      commit("FETCH_END", data);
+      const response = await CallerApiService.query("roles?page=" + pageNum);
+      if (response && response.status === 200) {
+        commit("FETCH_END", response.data);
+      }
     } catch ({ response }) {
       commit("SET_ERROR", JSON.parse(response.data));
       throw new Error(JSON.parse(response.data));
@@ -57,8 +65,10 @@ const actions = {
 
   async ROLE_CREATE({ commit }, role) {
     try {
-      const { data } = await CallerApiService.create("roles", role);
-      commit("CREATE_ROLE", data);
+      const response = await CallerApiService.create("roles", role);
+      if (response && response.status === 200) {
+        commit("CREATE_ROLE", response.data);
+      }
     } catch ({ response }) {
       commit("SET_ERROR", JSON.parse(response.data));
       throw new Error(JSON.parse(response.data));
@@ -67,8 +77,14 @@ const actions = {
 
   async ROLE_UPDATE({ commit }, params) {
     try {
-      const { data } = await CallerApiService.update("roles", params.id, params.updatedFields);
-      commit("UPDATE_ROLE", data);
+      const response = await CallerApiService.update(
+        "roles",
+        params.id,
+        params.updatedFields
+      );
+      if (response && response.status === 200) {
+        commit("UPDATE_ROLE", response.data);
+      }
     } catch ({ response }) {
       commit("SET_ERROR", JSON.parse(response.data));
       throw new Error(JSON.parse(response.data));
@@ -77,8 +93,8 @@ const actions = {
 
   async ROLE_DELETE({ commit }, id) {
     try {
-      const { data } = await CallerApiService.delete("roles", id);
-      commit("DELETE_ROLE", data);
+      await CallerApiService.delete("roles", id);
+      commit("DELETE_ROLE", id);
     } catch ({ response }) {
       commit("SET_ERROR", JSON.parse(response.data));
       throw new Error(JSON.parse(response.data));
@@ -109,8 +125,8 @@ const mutations = {
     state.roles.data.splice(index, 1, role);
     state.errors = {};
   },
-  DELETE_ROLE(state, role) {
-    const index = state.roles.data.findIndex(item => item.id === role.id);
+  DELETE_ROLE(state, id) {
+    const index = state.roles.data.findIndex(item => item.id === id);
     state.roles.data.splice(index, 1);
     state.errors = {};
   }
