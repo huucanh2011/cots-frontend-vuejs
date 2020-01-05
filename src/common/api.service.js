@@ -1,30 +1,10 @@
-import Vue from "vue";
 import axios from "axios";
-// import VueAxios from "vue-axios";
-import JwtService from "@/common/jwt.service";
 
+import JwtService from "@/common/jwt.service";
 import { API_URL } from "@/common/config";
 
-// axios.defaults.baseURL = API_URL;
-
 const ApiService = {
-  // init() {
-  //   // Vue.use(VueAxios, axios);
-  //   Vue.use(axios);
-  //   Vue.axios.defaults.baseURL = API_URL;
-  // },
-
   setHeader() {
-    // Vue.axios.defaults.headers.common["Content-Type"] = "application/json";
-
-    // Vue.axios.defaults.headers.common["Content-Type"] = "multipart/form-data";
-
-    // Vue.axios.defaults.headers.common["Accept"] = "application/json";
-
-    // Vue.axios.defaults.headers.common[
-    //   "Authorization"
-    // ] = `Bearer ${JwtService.getToken()}`;
-
     axios.defaults.headers.common["Content-Type"] = "multipart/form-data";
 
     axios.defaults.headers.common["Accept"] = "application/json";
@@ -40,12 +20,6 @@ const ApiService = {
     });
   },
 
-  // query(resource, params) {
-  //   return Vue.axios.get(resource, params).catch(error => {
-  //     throw new Error(`ApiService ${error}`);
-  //   });
-  // },
-
   get(resource, id) {
     if (id !== null && id !== undefined && id !== "") {
       return axios.get(`${API_URL}/${resource}/${id}`).catch(error => {
@@ -59,7 +33,9 @@ const ApiService = {
   },
 
   post(resource, params) {
-    return axios.post(`${API_URL}/${resource}`, params);
+    return axios.post(`${API_URL}/${resource}`, params).catch(error => {
+      throw new Error(`ApiService ${error.response.data}`);
+    });
   },
 
   update(resource, id, params) {
@@ -77,6 +53,13 @@ const ApiService = {
       });
     }
   }
+
+  // query(resource, params) {
+  //   return Vue.axios.get(resource, params).catch(error => {
+  //     throw new Error(`ApiService ${error}`);
+  //   });
+  // },
+
   // post(resource, params) {
   //   return Vue.axios.post(`${resource}`, params);
   // },

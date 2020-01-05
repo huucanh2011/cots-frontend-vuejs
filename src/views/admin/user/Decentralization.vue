@@ -58,7 +58,7 @@
               </td>
               <td>
                 <span
-                  v-if="decentralization.is_active === 1"
+                  v-if="decentralization.is_active"
                   class="badge badge-success"
                 >
                   Active
@@ -75,7 +75,7 @@
                     value="0"
                     :id="fetchNameCheck(decentralization)"
                     @change="onChangeStatus($event, decentralization)"
-                    :checked="decentralization.is_active === 1"
+                    :checked="decentralization.is_active"
                   />
                   <label
                     class="custom-control-label"
@@ -187,9 +187,9 @@ export default {
       this.DECENTRALIZATIONS_PAGINATE(pageNum);
     },
     async onChangeStatus($event, decentralization) {
-      let isActive = 0;
+      let isActive = false;
       if ($event.target.checked === true) {
-        isActive = 1;
+        isActive = true;
       }
       let user = {
         id: decentralization.id,

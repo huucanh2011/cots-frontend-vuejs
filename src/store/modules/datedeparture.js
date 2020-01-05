@@ -30,9 +30,13 @@ const actions = {
   },
 
   DATE_CREATE(context, date) {
+    console.log(date);
+    
     return new Promise((reslove, reject) => {
       CallerApiService.create("date-departure", date)
         .then(res => {
+          console.log(res);
+          
           if (res && res.status === 200) {
             context.commit("DATE_CREATE", res.data);
             reslove(res);
