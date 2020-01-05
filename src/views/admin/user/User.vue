@@ -75,7 +75,7 @@
                 </span>
               </td>
               <td>
-                <span v-if="user.is_active === 1" class="badge badge-success">
+                <span v-if="user.is_active" class="badge badge-success">
                   Active
                 </span>
                 <span v-else class="badge badge-danger">
@@ -90,7 +90,7 @@
                     value="0"
                     :id="fetchNameCheck(user)"
                     @change="onChangeStatus($event, user)"
-                    :checked="user.is_active === 1"
+                    :checked="user.is_active"
                   />
                   <label
                     class="custom-control-label"
@@ -340,9 +340,9 @@ export default {
       return "checkbox_" + x.id;
     },
     onChangeStatus($event, payload) {
-      let isActive = 0;
-      if ($event.target.checked === true) {
-        isActive = 1;
+      let isActive = false;
+      if ($event.target.checked) {
+        isActive = true;
       }
       let user = {
         id: payload.id,

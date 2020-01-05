@@ -82,12 +82,12 @@
               <td class="text-center">
                 <span
                   :class="
-                    post.is_active === 1
+                    post.is_active
                       ? 'badge badge-success'
                       : 'badge badge-danger'
                   "
                 >
-                  {{ post.is_active === 1 ? "Active" : "Blocked" }}
+                  {{ post.is_active ? "Active" : "Blocked" }}
                 </span>
               </td>
               <td class="text-center">
@@ -98,7 +98,7 @@
                     value="0"
                     :id="fetchNameCheck(post)"
                     @change="onChangeStatus($event, post)"
-                    :checked="post.is_active === 1"
+                    :checked="post.is_active"
                   />
                   <label
                     class="custom-control-label"
@@ -466,9 +466,9 @@ export default {
       this.POSTS_SEARCH(this.searchText);
     },
     onChangeStatus($event, payload) {
-      let is_active = 0;
-      if ($event.target.checked === true) {
-        is_active = 1;
+      let is_active = false;
+      if ($event.target.checked) {
+        is_active = true;
       }
       let post = {
         id: payload.id,
