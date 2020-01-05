@@ -59,7 +59,7 @@
               <td>{{ tour.tour_price | myCurrency }} đ</td>
               <td>{{ tour.tour_cate.cate_name }}</td>
               <td>
-                <span v-if="tour.is_active === 1" class="badge badge-success">Active</span>
+                <span v-if="tour.is_active" class="badge badge-success">Active</span>
                 <span v-else class="badge badge-danger">Blocked</span>
               </td>
               <td>
@@ -69,7 +69,7 @@
                     type="checkbox"
                     :id="fetchNameCheck(tour)"
                     @change="onChangeStatus($event, tour)"
-                    :checked="tour.is_active === 1"
+                    :checked="tour.is_active"
                   />
                   <label
                     class="custom-control-label"
@@ -222,9 +222,9 @@ export default {
       return "checkbox_" + x.id;
     },
     onChangeStatus($event, payload) {
-      let isActive = 0;
-      if ($event.target.checked === true) {
-        isActive = 1;
+      let isActive = true;
+      if ($event.target.checked) {
+        isActive = false;
       }
       let tour = {
         id: payload.id,

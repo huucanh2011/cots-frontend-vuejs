@@ -188,7 +188,7 @@ export default {
     },
     async onChangeStatus($event, decentralization) {
       let isActive = false;
-      if ($event.target.checked === true) {
+      if ($event.target.checked) {
         isActive = true;
       }
       let user = {

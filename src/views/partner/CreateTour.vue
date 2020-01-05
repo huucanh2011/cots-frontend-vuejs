@@ -150,9 +150,9 @@ export default {
         async createTour() {
             this.loadingButton = true;
             let vm = this.tour;
-            let active = 1;
+            let active = true;
             if(vm.isActive === false) {
-                active = 0;
+                active = false;
             }
             let formData = new FormData();         
             formData.append("image_cover", vm.imageCover[0]);

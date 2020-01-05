@@ -278,7 +278,7 @@ export default {
       // this.TOUR_ORDER_PAGINATE(pageNum);
     },
     activeTourOrder(payload) {
-      let isActive = 1;
+      let isActive = true;
       let tourOrder = {
         id: payload.id,
         is_active: isActive
@@ -286,7 +286,7 @@ export default {
       this.TOUR_ORDER_ACTIVE(tourOrder);
     },
     blockTourOrder(payload) {      
-      let isActive = 0;
+      let isActive = false;
       let tourOrder = {
         id: payload.id,
         is_active: isActive
